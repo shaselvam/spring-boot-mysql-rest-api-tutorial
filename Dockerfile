@@ -10,17 +10,12 @@ RUN yum clean all
 
 ENV CA_CERTIFICATES_JAVA_VERSION 20140324
 
-RUN yum -y update nss nss-softokn nss-softokn-freebl nss-util sqlite
 RUN yum -v install -y \
     wget \
-    zip \
-    openssh-client \
-    unzip \
     java-1.8.0-openjdk \
     && yum clean all
-
+RUN mkdir -p /home/ec2-user
 COPY target/*jar /home/ec2-user/
-
 RUN chmod -R 777 /home/ec2-user/
 
 # Expose ports.
