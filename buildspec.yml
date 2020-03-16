@@ -3,8 +3,6 @@ version: 0.2
 phases:
   install:
     commands:
-      - aws --version
-      - docker --version
       - apt-get update -y
       - apt-get install -y software-properties-common
       - add-apt-repository ppa:openjdk-r/ppa
@@ -19,7 +17,8 @@ phases:
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       - REPOSITORY_URI=891076391930.dkr.ecr.ap-southeast-1.amazonaws.com/demo-test
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      #- IMAGE_TAG=${COMMIT_HASH:=latest}
+      - ECR_IMAGE='demo-webapp'
   build:
     commands:
       - echo Build started on `date`
@@ -27,14 +26,15 @@ phases:
       - mvn package
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker tag "${ECR_IMAGE}:latest" "$REPOSITORY_URI:${ECR_IMAGE}"
+      #- docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - printf '[{"name":"demo-test-web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      #- docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$ECR_IMAGE
+      - printf '[{"name":"demo-test-web","imageUri":"%s"}]' $REPOSITORY_URI:$ECR_IMAGE > imagedefinitions.json
 artifacts:
     files: imagedefinitions.json
 cache:
