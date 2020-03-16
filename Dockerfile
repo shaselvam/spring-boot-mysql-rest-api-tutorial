@@ -3,9 +3,6 @@ FROM centos:centos7
 # Yum workaround to stalled mirror
 RUN sed -i -e 's/enabled=1/enabled=0/g' /etc/yum/pluginconf.d/fastestmirror.conf
 RUN sed -i -e 's$\#baseurl\=http\:\/\/mirror.centos.org\/centos\/\$releasever\/updates\/\$basearch\/$baseurl\=http\:\/\/mirror.centos.org\/centos\/\$releasever\/updates\/\$basearch\/$g' /etc/yum.repos.d/CentOS-Base.repo
-
-RUN rm -f /var/lib/rpm/__*
-RUN rpm --rebuilddb -v -v
 RUN yum clean all
 
 ENV CA_CERTIFICATES_JAVA_VERSION 20140324
