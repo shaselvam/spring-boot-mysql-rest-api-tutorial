@@ -34,3 +34,6 @@ phases:
       - printf '[{"name":"demo-test-web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
     files: imagedefinitions.json
+cache:
+  paths:
+    - '/root/.m2/**/*'
