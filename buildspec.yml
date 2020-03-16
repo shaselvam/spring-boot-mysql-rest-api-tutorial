@@ -13,7 +13,6 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - docker --version
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       - REPOSITORY_URI=891076391930.dkr.ecr.ap-southeast-1.amazonaws.com/demo-test
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
@@ -23,18 +22,17 @@ phases:
       - echo Build started on `date`
       - echo Building the Application image...
       - mvn package
-      - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+	    - echo Building the Docker image...
+      #- docker build -t $REPOSITORY_URI:latest .
+	    - docker build -t $REPOSITORY_URI .
+      - docker tag $REPOSITORY_URI $REPOSITORY_URI:${CODEBUILD_BUILD_ID##*:}
   post_build:
     commands:
+      commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      #- docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$ECR_IMAGE
-      - printf '[{"name":"demo-test-web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:${CODEBUILD_BUILD_ID##*:}
+	    - "echo {\\\"image\\\":\\\"$REPOSITORY_URI:${CODEBUILD_BUILD_ID##*:}\\\"} > imagedefinitions.json"
 artifacts:
     files: imagedefinitions.json
-cache:
-  paths:
-    - '/root/.m2/**/*'
