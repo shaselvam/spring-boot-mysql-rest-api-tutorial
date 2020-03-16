@@ -27,3 +27,4 @@ nbdist/
 ##Docker spec##
 Dockerfile
 buildspec.yml
+*.yml
