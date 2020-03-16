@@ -23,3 +23,7 @@ dist/
 nbdist/
 .nb-gradle/
 .elasticbeanstalk
+
+##Docker spec##
+Dockerfile
+buildspec.yml
