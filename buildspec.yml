@@ -22,9 +22,8 @@ phases:
       - echo Build started on `date`
       - echo Building the Application image...
       - mvn package
-	    - echo Building the Docker image...
-      #- docker build -t $REPOSITORY_URI:latest .
-	    - docker build -t $REPOSITORY_URI .
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI .
       - docker tag $REPOSITORY_URI $REPOSITORY_URI:${CODEBUILD_BUILD_ID##*:}
   post_build:
     commands:
@@ -33,6 +32,6 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:${CODEBUILD_BUILD_ID##*:}
-	    - "echo {\\\"image\\\":\\\"$REPOSITORY_URI:${CODEBUILD_BUILD_ID##*:}\\\"} > imagedefinitions.json"
+      - "echo {\\\"image\\\":\\\"$REPOSITORY_URI:${CODEBUILD_BUILD_ID##*:}\\\"} > imagedefinitions.json"
 artifacts:
     files: imagedefinitions.json
