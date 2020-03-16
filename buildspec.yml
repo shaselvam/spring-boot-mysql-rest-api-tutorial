@@ -22,8 +22,8 @@ phases:
       - echo Build started on `date`
       - echo Building the Application image...
       - mvn package
-	    - echo Building the Docker image...
-	    - docker build -t $REPOSITORY_URI .
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI .
       - docker tag $REPOSITORY_URI $REPOSITORY_URI:latest
   post_build:
     commands:
