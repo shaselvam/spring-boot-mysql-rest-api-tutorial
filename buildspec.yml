@@ -15,15 +15,16 @@ phases:
       - echo Building the Docker image...
       - REPO_URI=891076391930.dkr.ecr.ap-southeast-1.amazonaws.com/demo-test
       - docker build -t $REPO_URI .
-      - docker tag "$CONTAINER_NAME:latest" $REPO_URI
+      - docker tag demo-test-web:latest $REPO_URI
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
       - REPO_URI=891076391930.dkr.ecr.ap-southeast-1.amazonaws.com/demo-test
-      - docker push $REPO_URI:latest
+      - docker push $REPO_URI:demo-test-web
       - docker push $REPO_URI:$IMAGE_TAG
+      - docker push $REPO_URI:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$REPO_URI:$IMAGE_TAG" | tee imagedefinitions.json
+      - printf '[{"name":"demo-test-web","imageUri":"%s"}]' $REPO_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
