@@ -27,7 +27,6 @@ phases:
       - docker tag $REPOSITORY_URI $REPOSITORY_URI:${CODEBUILD_BUILD_ID##*:}
   post_build:
     commands:
-      commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
