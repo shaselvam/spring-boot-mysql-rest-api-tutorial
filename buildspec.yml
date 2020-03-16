@@ -14,7 +14,7 @@ phases:
       - mvn package
       - echo Building the Docker image...
       - REPO_URI=891076391930.dkr.ecr.ap-southeast-1.amazonaws.com/demo-test
-      - docker build -t $REPOSITORY_URI .
+      - docker build -t $REPO_URI .
       - docker tag "$CONTAINER_NAME:latest" $REPO_URI
   post_build:
     commands:
