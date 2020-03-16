@@ -3,6 +3,8 @@ version: 0.2
 phases:
   install:
     commands:
+      - aws --version
+      - docker --version
       - apt-get update -y
       - apt-get install -y software-properties-common
       - add-apt-repository ppa:openjdk-r/ppa
