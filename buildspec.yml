@@ -24,6 +24,6 @@ phases:
       #- docker push $REPO_URI:latest
       - docker push $REPO_URI:${CODEBUILD_BUILD_ID##*:}
       - echo Writing image definitions file...
-      - printf '[{"name":"demo-test-web","imageUri":"%s"}]' $REPO_URI:${CODEBUILD_BUILD_ID##*:} > imagedefinitions.json
+      - printf '[{"name":"java-app","imageUri":"%s"}]' $REPO_URI:${CODEBUILD_BUILD_ID##*:} > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
